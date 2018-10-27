@@ -110,7 +110,10 @@ def trailiter(iterable, skipfirst=False):
     """
     it = iter(iterable)
     if skipfirst:
-        prev = next(it)
+        try:
+            prev = next(it)
+        except StopIteration:
+            return
     else:
         prev = None
     for item in it:
