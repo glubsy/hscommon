@@ -1,6 +1,4 @@
-# Created By: Virgil Dupras
-# Created On: 2011-01-12
-# Copyright 2015 Hardcoded Software (http://www.hardcoded.net)
+# Copyright 2018 Virgil Dupras
 #
 # This software is licensed under the "GPLv3" License as described in the "LICENSE" file,
 # which should be included with this package. The terms are also available at
@@ -9,7 +7,7 @@
 import os.path as op
 import re
 
-from distutils.version import LooseVersion 
+from distutils.version import LooseVersion
 from pkg_resources import load_entry_point, get_distribution
 
 from .build import read_changelog_file, filereplace
@@ -59,8 +57,9 @@ def gen(basepath, destpath, changelogpath, tixurl, confrepl=None, confpath=None,
     confrepl['version'] = changelog[0]['version']
     changelog_out = op.join(basepath, 'changelog.rst')
     filereplace(changelogtmpl, changelog_out, changelog='\n'.join(rendered_logs))
-    conf_out = op.join(basepath, 'conf.py')
-    filereplace(confpath, conf_out, **confrepl)
+    if op.exists(confpath):
+        conf_out = op.join(basepath, 'conf.py')
+        filereplace(confpath, conf_out, **confrepl)
     if LooseVersion(get_distribution("sphinx").version) >= LooseVersion("1.7.0"):
         from sphinx.cmd.build import build_main as sphinx_build
         # Call the sphinx_build function, which is the same as doing sphinx-build from cli
