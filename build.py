@@ -275,9 +275,12 @@ re_changelog_header = re.compile(r'=== ([\d.b]*) \(([\d\-]*)\)')
 def read_changelog_file(filename):
     def iter_by_three(it):
         while True:
-            version = next(it)
-            date = next(it)
-            description = next(it)
+            try:
+                version = next(it)
+                date = next(it)
+                description = next(it)
+            except StopIteration:
+                return
             yield version, date, description
 
     with open(filename, 'rt', encoding='utf-8') as fp:
